@@ -7,6 +7,7 @@ const cors = require("cors")
 
 app.use(cors())
 app.use(morgan("dev"))
+
 app.get("/", (req, res)=>{
     res.json("hello world!")
 })
