@@ -36,18 +36,18 @@ const createGrid = (paintings) => {
   return grid;
 }
 
-const GridMapper = ({grid}) => {
-  console.log(grid)
+const GridMapper = ({grid, clickHandler}) => {
   return grid.map((currRow, row_index) => (
    <div key={row_index} style={{...Styles.gridRow}} className="gridRow">
      {currRow.map((currSqr, sqr_index) => (
-       <GridSquare key={sqr_index} currSqr={currSqr} sqr_index={sqr_index}/>
+       <GridSquare key={sqr_index} currSqr={currSqr} sqr_index={sqr_index}
+       clickHandler={clickHandler}/>
      ))}
    </div> 
   ))
 }
 
-const GridSquare = ({sqr_index, currSqr}) => {
+const GridSquare = ({sqr_index, currSqr, clickHandler}) => {
   // const [showHover, setShowHover] = useState(false)
   const [ conditionalColor, setConditionalColor ] = useState('transparent')
   const switchHoverState = (color) => {
@@ -70,10 +70,12 @@ const GridSquare = ({sqr_index, currSqr}) => {
     height: '90%'
   }
 
+
   return (
     <div 
       onMouseEnter={() => switchHoverState('grey')} 
       onMouseLeave={() => switchHoverState('transparent')} 
+      onClick={() => clickHandler(currSqr.x, currSqr.y, currSqr.paintingSrc, true)}
       style={{...gridSquareStyles}} 
     >
       <img key={sqr_index} style={{...imgStyles}} src={currSqr.paintingSrc} alt="" />
@@ -81,7 +83,7 @@ const GridSquare = ({sqr_index, currSqr}) => {
   )
 }
 
-function Grid({paintings}) {
+function Grid({paintings, clickHandler}) {
   const [gridData, setGridData] = useState({
     loading: true,
     grid: []
@@ -96,10 +98,9 @@ function Grid({paintings}) {
     )
   }, [paintings])
 
-  console.log(gridData)
   return (
     <div className="grid">
-      <GridMapper grid={gridData.grid}/>
+      <GridMapper clickHandler={clickHandler} grid={gridData.grid}/>
     </div>
   );
 }

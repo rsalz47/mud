@@ -24,7 +24,6 @@ app.use(morgan("dev"))
 
 app.get("/", (req, res)=>{
     res.json("hello world!")
-    pool.query()
 })
 
 app.get("/getImages", (req, res) => {
