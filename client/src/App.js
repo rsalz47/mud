@@ -14,7 +14,7 @@ function App() {
         <textarea id="searchfield" name="searchfield" rows="1" columns="3">
           x,y
         </textarea>
-
+        <p></p>
         <button type="button">
           Visit room (x,y)
         </button>
