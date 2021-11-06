@@ -8,7 +8,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Welcome to the Museum of User Design
         </p>
 
         <textarea id="searchfield" name="searchfield" rows="1" columns="3">
