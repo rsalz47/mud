@@ -27,13 +27,14 @@ app.get("/", (req, res)=>{
 })
 
 app.get("/getImages", (req, res) => {
+    //select everything from images
     pool.query('SELECT * FROM Museum', (err, result) => {
         if (err) {
           return console.error('Error executing query', err.stack)
         }
         console.log(result.rows)
+        res.json(result.rows);
       })
-    res.end(result.rows);
 })
 
 app.post("/insertImage", (req, res) => {
@@ -44,6 +45,7 @@ app.post("/insertImage", (req, res) => {
 
 app.get("/getByCoordinate/x=:x/y=:y", (req, res) => {
     // Get image from database at (x,y)
+    let rows = [];
     pool.query(`SELECT * FROM Museum 
                 WHERE x = ${req.params.x} AND y = ${req.params.y}`, 
         (err, result) => {
@@ -51,9 +53,13 @@ app.get("/getByCoordinate/x=:x/y=:y", (req, res) => {
             return console.error('Error executing query', err.stack)
         }
         console.log(result.rows)
+        //if not empty populate return val
+        if (result.rows !== []) {
+            rows = result.rows
+        }
+        //pipe to front end
+        res.json(rows);
       })
-    // Send data to front end
-    res.end(`Image found at (${req.params.x}, ${req.params.y})`);
 })
 
 //when hosted on VPS, change this to listen on every port?
