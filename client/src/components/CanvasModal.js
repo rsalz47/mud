@@ -138,7 +138,7 @@ function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open, name, 
                     ml={3}
                     colorScheme="blue"
                     onClick={submitHandler}
-                    disabled={formVal.length > 6 || formVal.length <= 0}
+                    disabled={formVal.length > 20 || formVal.length <= 0}
                   >
                   Submit
                   </Button>

@@ -33,14 +33,7 @@ function App() {
     imgSource: "",
     name: ""
   });
-  const [searchState, setSearchState] = useState("")
-
-  const handleSearch = () => {
-    fetch(`http://localhost:3001/getByName/${searchState}`).then(res => res.json()).then(data => {
-      console.log(data)
-    })
-  }
-
+  
   const clickHandler = (x, y, img, show, name) => {
     setShowingModal({show: show, coords: [x,y], imgSource: img, name: name})
   }
@@ -62,13 +55,13 @@ function App() {
     <div className="App">
       <header className="App-header">
 
-        <Text fontWeight="medium" >Welcome to the Museum of User Design</Text>
+        <Text mb="5" fontWeight="medium" >Welcome to the Museum of User Design</Text>
 
-        <FormControl w="lg" my="4" display="flex" alignItems="center" justifyContent="center">
+        {/* <FormControl w="lg" my="4" display="flex" alignItems="center" justifyContent="center"> */}
           {/* <FormLabel mx="2" fontWeight="light" m="0">Search: </FormLabel> */}
-          <Input onChange={e => setSearchState(e.target.value)} mx="2" variant="flushed" h="8" w="2xs" />
-          <Button onClick={handleSearch} size="sm" mx="2">Search</Button>
-        </FormControl>
+          {/* <Input onChange={e => setSearchState(e.target.value)} mx="2" variant="flushed" h="8" w="2xs" /> */}
+          {/* <Button onClick={handleSearch} size="sm" mx="2">Search</Button> */}
+        {/* </FormControl> */}
         {!loading && <Grid clickHandler={clickHandler} paintings={paintings} />}
         <CanvasModal 
           reloadPaintings={reloadPaintings}
