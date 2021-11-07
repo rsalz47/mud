@@ -7,6 +7,7 @@ console.log(DB_CONNECTION, DB_PASSWORD)
 const app = express()
 
 const cors = require("cors")
+app.use(express.json());
 
 const pool = new Pool({
     host: DB_CONNECTION,
@@ -37,11 +38,11 @@ app.get("/getImages", (req, res) => {
     })
 })
 
-app.post("/insertImage/x=:x/y=:y/image=:image/name=:name", (req, res) => {
+app.post("/insertImage", (req, res) => {
     // Send to database
     let temp;
     pool.query(`INSERT INTO MUSEUM (x, y, image, name)
-                VALUES (${req.params.x}, ${req.params.y}, '${req.params.image}', '${req.params.name}');`,
+                VALUES (${req.body.x}, ${req.body.y}, '${req.body.image}', '${req.body.name}');`,
         (err, result) => {
             if (err) {
                 return console.error('Error executing query', err.stack)
@@ -55,7 +56,7 @@ app.post("/insertImage/x=:x/y=:y/image=:image/name=:name", (req, res) => {
 app.get("/getByCoordinate/x=:x/y=:y", (req, res) => {
     // Get image from database at (x,y)
     let rows = [];
-    pool.query(`SELECT * FROM Museum 
+    pool.query(`SELECT image FROM Museum 
                 WHERE x = ${req.params.x} AND y = ${req.params.y}`, 
                 (err, result) => {
                     if (err) {
@@ -77,7 +78,7 @@ app.get("/getByName/name=:name", (req, res) => {
     let name = req.params.name.toLowerCase()
     let bestname = getBestName(name)
     
-    pool.query(`SELECT * FROM Museum 
+    pool.query(`SELECT image FROM Museum 
                 WHERE name = ${bestname}`,   
                 (err,result) => {
                     if (err) {
