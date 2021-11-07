@@ -3,6 +3,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import Grid from './components/Grid/Grid'
 import CanvasModal from "./components/CanvasModal";
+import { Input, FormControl, FormLabel, Text, Button} from "@chakra-ui/react"
 
 const getAVI = (x, y) => `https://avatars.dicebear.com/api/bottts/${x}:${y}.svg`
 const MOCK_PAINTINGS = [
@@ -32,6 +33,13 @@ function App() {
     imgSource: "",
     name: ""
   });
+  const [searchState, setSearchState] = useState("")
+
+  const handleSearch = () => {
+    fetch(`http://localhost:3001/getByName/${searchState}`).then(res => res.json()).then(data => {
+      console.log(data)
+    })
+  }
 
   const clickHandler = (x, y, img, show, name) => {
     setShowingModal({show: show, coords: [x,y], imgSource: img, name: name})
@@ -54,9 +62,13 @@ function App() {
     <div className="App">
       <header className="App-header">
 
-        <p style={{marginBottom: '1rem'}} >Welcome to the Museum of User Design</p>
-        
+        <Text fontWeight="medium" >Welcome to the Museum of User Design</Text>
 
+        <FormControl w="lg" my="4" display="flex" alignItems="center" justifyContent="center">
+          {/* <FormLabel mx="2" fontWeight="light" m="0">Search: </FormLabel> */}
+          <Input onChange={e => setSearchState(e.target.value)} mx="2" variant="flushed" h="8" w="2xs" />
+          <Button onClick={handleSearch} size="sm" mx="2">Search</Button>
+        </FormControl>
         {!loading && <Grid clickHandler={clickHandler} paintings={paintings} />}
         <CanvasModal 
           reloadPaintings={reloadPaintings}
