@@ -49,7 +49,6 @@ const GridMapper = ({grid, clickHandler}) => {
 }
 
 const GridSquare = ({sqr_index, currSqr, clickHandler}) => {
-  console.log(currSqr)
   // const [showHover, setShowHover] = useState(false)
   const [ conditionalColor, setConditionalColor ] = useState('transparent')
   const switchHoverState = (color) => {

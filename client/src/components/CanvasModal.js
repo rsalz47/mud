@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, createRef } from 'react'
 import {
   Button,
   Modal,
@@ -19,16 +19,18 @@ import {
   Radio,
   HStack,
   Input,
-  Image
+  Image,
+  Switch
 } from "@chakra-ui/react"
 
 import CanvasDraw from "react-canvas-draw";
 
-function BodyForModal({ imgSource }) {
+function BodyForModal({ imgSource, canvasRef }) {
   const [canvasOptions, setCanvasOptions] = useState({
     brushRadius: 12,
     brushColor: "#212121",
   })
+  const [toggleOn, setToggleOn] = useState(false);
 
   if (imgSource !== '') {
     return (
@@ -38,18 +40,34 @@ function BodyForModal({ imgSource }) {
   else {
     return (
       <>
-        <CanvasDraw
-          style={{ borderRadius: '1rem', margin: '0.5rem 0' }}
-          brushRadius={canvasOptions.brushRadius}
-          brushColor={canvasOptions.brushColor}
-        />
-        <FormLabel m={0} as="legend">Brush Radius</FormLabel>
-        <Slider mb={1} onChange={value => setCanvasOptions({ ...canvasOptions, brushRadius: value })} aria-label="slider-ex-1" defaultValue={10} min={0} max={20} step={1}>
-          <SliderTrack>
-            <SliderFilledTrack />
-          </SliderTrack>
-          <SliderThumb />
-        </Slider>
+        <div style={{width: '100%', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', marginBottom: '1rem'}}>
+          <CanvasDraw
+            ref={canvasRef}
+            hideGrid={true}
+            style={{ borderRadius: '1rem', margin: '0.5rem 0' }}
+            brushRadius={toggleOn ? '30' : canvasOptions.brushRadius}
+            brushColor={toggleOn ? 'white' : canvasOptions.brushColor}
+          />
+          <div style={{display: 'flex', flexDirection: "column", justifyContent: 'space-evenly', alignItems: 'center'}} >
+            <Slider
+              mb={1}
+              onChange={value => setCanvasOptions({ ...canvasOptions, brushRadius: value })}
+              aria-label="slider-ex-1"
+              orientation="vertical"
+              defaultValue={10}
+              min={0}
+              max={20}
+              step={1}
+              minH="sm"
+            >
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+              <SliderThumb />
+            </Slider>
+            <FormLabel m={0} fontSize="xs" >Brush Radius</FormLabel>
+          </div>
+        </div>
         <FormControl as="fieldset">
           <FormLabel as="legend">Color</FormLabel>
           <RadioGroup onChange={value => setCanvasOptions({ ...canvasOptions, brushColor: value })} defaultValue="#212121">
@@ -63,6 +81,12 @@ function BodyForModal({ imgSource }) {
             </HStack>
           </RadioGroup>
         </FormControl>
+        <FormControl display="flex" mb="0" mt="2">
+          <FormLabel >
+            Eraser?
+          </FormLabel>
+          <Switch onChange={() => setToggleOn(!toggleOn)} id="email-alerts" />
+        </FormControl>
       </>
     )
   }
@@ -70,14 +94,20 @@ function BodyForModal({ imgSource }) {
 
 function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open, name }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [formVal, setFormVal] = useState("")
+  const canvasRef = createRef();
+
+  const saveData = () => {
+    console.log(canvasRef.current.canvasContainer.childNodes[1].toDataURL())
+  };
+
   const closeHandler = () => {
     clickHandler(null, null, "", false)
   }
 
   const submitHandler = () => {
-
+    closeHandler()
   }
-
   return (
     <>
       <Modal size="xl" isOpen={open} onClose={closeHandler} closeOnOverlayClick={imgSource !== ""} scrollBehavior="outside">
@@ -86,18 +116,25 @@ function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open, name }
           <ModalHeader>{imgSource === "" ? 'Draw!' : name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <BodyForModal imgSource={imgSource} />
+            <BodyForModal canvasRef={canvasRef} imgSource={imgSource} />
           </ModalBody>
           {
             imgSource === "" &&
               <ModalFooter onSubmit={submitHandler} width="full" display="flex" alignItems="space-between">
                 <FormControl display="flex">
                   <Input
+                    onChange={e => setFormVal(e.target.value)}
                     variant="flushed"
                     placeholder="Enter Artwork Title"
                     isRequired
                   />
-                  <Button ml={3} colorScheme="blue" onClick={closeHandler}>
+                  <Button 
+                    ml={3}
+                    colorScheme="blue"
+                    // onClick={submitHandler}
+                    onClick={saveData}
+                    disabled={formVal.length > 6 || formVal.length <= 0}
+                  >
                   Submit
                   </Button>
                 </FormControl>
