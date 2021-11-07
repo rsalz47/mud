@@ -108,7 +108,7 @@ function getBestName(name) {
         return name;
     }
 
-    let allNamesScores = Array.new(allnames.length) 
+    let allNamesScores = Array.new(allNames.length) 
     allNames.forEach((elem) => elem.toLowerCase())
 
     //calculate the score for every name
