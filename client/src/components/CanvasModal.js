@@ -109,34 +109,4 @@ function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open, name }
   )
 }
 
-  return (
-    <>
-      <Modal size="xl" isOpen={open} onClose={closeHandler} closeOnOverlayClick={false} scrollBehavior="outside">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Draw!</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <BodyForModal imgSource={imgSource} />
-            {/* <h1>{x}:{y}:{imgSource}</h1> */}
-          </ModalBody>
-
-          <ModalFooter onSubmit={submitHandler} width="full" display="flex" alignItems="space-between">
-            <FormControl display="flex">
-              <Input
-                variant="flushed"
-                placeholder="Enter Artwork Title"
-                isRequired
-              />
-              <Button ml={3} colorScheme="blue" onClick={closeHandler}>
-              Submit
-              </Button>
-            </FormControl>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  )
-}
-
 export default CanvasModal;
