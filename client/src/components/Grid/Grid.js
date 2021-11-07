@@ -26,11 +26,12 @@ const generateBlankGrid = () => {
 
 const createGrid = (paintings) => {
   const grid = generateBlankGrid();
-  paintings.forEach(({x, y, paintingSrc}) => {
+  paintings.forEach(({x, y, paintingSrc, name}) => {
     grid[x][y] = {
       x: x,
       y: y,
-      paintingSrc: paintingSrc
+      paintingSrc: paintingSrc,
+      name: name
     }
   })
   return grid;
@@ -48,6 +49,7 @@ const GridMapper = ({grid, clickHandler}) => {
 }
 
 const GridSquare = ({sqr_index, currSqr, clickHandler}) => {
+  console.log(currSqr)
   // const [showHover, setShowHover] = useState(false)
   const [ conditionalColor, setConditionalColor ] = useState('transparent')
   const switchHoverState = (color) => {
@@ -75,7 +77,7 @@ const GridSquare = ({sqr_index, currSqr, clickHandler}) => {
     <div 
       onMouseEnter={() => switchHoverState('grey')} 
       onMouseLeave={() => switchHoverState('transparent')} 
-      onClick={() => clickHandler(currSqr.x, currSqr.y, currSqr.paintingSrc, true)}
+      onClick={() => clickHandler(currSqr.x, currSqr.y, currSqr.paintingSrc, true, currSqr.name)}
       style={{...gridSquareStyles}} 
     >
       <img key={sqr_index} style={{...imgStyles}} src={currSqr.paintingSrc} alt="" />

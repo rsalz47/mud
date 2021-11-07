@@ -19,6 +19,7 @@ import {
   Radio,
   HStack,
   Input,
+  Image
 } from "@chakra-ui/react"
 
 import CanvasDraw from "react-canvas-draw";
@@ -30,7 +31,9 @@ function BodyForModal({ imgSource }) {
   })
 
   if (imgSource !== '') {
-    return <h1>IMAGE HERE</h1>
+    return (
+      <Image src={imgSource}/>
+    )
   }
   else {
     return (
@@ -65,15 +68,46 @@ function BodyForModal({ imgSource }) {
   }
 }
 
-function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open }) {
+function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open, name }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const closeHandler = () => {
     clickHandler(null, null, "", false)
   }
 
   const submitHandler = () => {
-    
+
   }
+
+  return (
+    <>
+      <Modal size="xl" isOpen={open} onClose={closeHandler} closeOnOverlayClick={imgSource !== ""} scrollBehavior="outside">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{imgSource === "" ? 'Draw!' : name}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <BodyForModal imgSource={imgSource} />
+          </ModalBody>
+          {
+            imgSource === "" &&
+              <ModalFooter onSubmit={submitHandler} width="full" display="flex" alignItems="space-between">
+                <FormControl display="flex">
+                  <Input
+                    variant="flushed"
+                    placeholder="Enter Artwork Title"
+                    isRequired
+                  />
+                  <Button ml={3} colorScheme="blue" onClick={closeHandler}>
+                  Submit
+                  </Button>
+                </FormControl>
+              </ModalFooter>
+          }
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
 
   return (
     <>
