@@ -42,6 +42,7 @@ function App() {
       <header className="App-header">
 
         <p>Welcome to the Museum of User Design</p>
+        
 
         <Grid clickHandler={clickHandler} paintings={MOCK_PAINTINGS} />
         <CanvasModal 
