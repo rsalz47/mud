@@ -24,7 +24,8 @@ const MOCK_PAINTINGS = [
 ]
 
 function App() {
-
+  const [paintings, setPaintings] = useState([])
+  const [loading, setLoading] = useState(true)
   const [showingModal, setShowingModal] = useState({
     show: false,
     coords: [null, null],
@@ -36,16 +37,29 @@ function App() {
     setShowingModal({show: show, coords: [x,y], imgSource: img, name: name})
   }
 
-  
+  const reloadPaintings = () => {
+    // fetch('http://localhost:3001/getImages').then(res => res.json()).then(data => {
+    //   setPaintings(data)
+    // })
+    window.location.reload();
+  }
+
+  useEffect(() => {
+    fetch('http://localhost:3001/getImages').then(res => res.json()).then(data => {
+      setPaintings(data)
+      setLoading(false)
+    })
+  }, [])
   return (
     <div className="App">
       <header className="App-header">
 
-        <p>Welcome to the Museum of User Design</p>
+        <p style={{marginBottom: '1rem'}} >Welcome to the Museum of User Design</p>
         
 
-        <Grid clickHandler={clickHandler} paintings={MOCK_PAINTINGS} />
+        {!loading && <Grid clickHandler={clickHandler} paintings={paintings} />}
         <CanvasModal 
+          reloadPaintings={reloadPaintings}
           showingModal={showingModal}
           clickHandler={clickHandler}
           open={showingModal.show}

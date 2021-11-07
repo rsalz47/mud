@@ -3,7 +3,6 @@ const { Pool } = require('pg')
 const morgan = require("morgan")
 const { DB_CONNECTION, DB_PASSWORD} = require('./SECRETS')
 
-console.log(DB_CONNECTION, DB_PASSWORD)
 const app = express()
 
 const cors = require("cors")
@@ -29,11 +28,10 @@ app.get("/", (req, res)=>{
 
 app.get("/getImages", (req, res) => {
     //select everything from images
-    pool.query('SELECT image FROM Museum', (err, result) => {
+    pool.query('SELECT * FROM Museum', (err, result) => {
         if (err) {
           return console.error('Error executing query', err.stack)
         }
-        console.log(result.rows)
         res.json(result.rows);
     })
 })

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const ROOM_SIZE = 17;
-const [rows, cols] = [30, 60]
+const [rows, cols] = [35, 75]
 
 const Styles = {
   gridRow: {
@@ -16,7 +16,7 @@ const generateBlankGrid = () => {
     let currRow = []
     for (let j = 0; j < cols; j++) {
       currRow.push({
-        x: j, y: i, paintingSrc: ""
+        x: j, y: i, image: ""
       });
     }
     arr.push(currRow);
@@ -26,11 +26,11 @@ const generateBlankGrid = () => {
 
 const createGrid = (paintings) => {
   const grid = generateBlankGrid();
-  paintings.forEach(({x, y, paintingSrc, name}) => {
-    grid[x][y] = {
+  paintings.forEach(({x, y, image, name}) => {
+    grid[y][x] = {
       x: x,
       y: y,
-      paintingSrc: paintingSrc,
+      image: image,
       name: name
     }
   })
@@ -76,10 +76,10 @@ const GridSquare = ({sqr_index, currSqr, clickHandler}) => {
     <div 
       onMouseEnter={() => switchHoverState('grey')} 
       onMouseLeave={() => switchHoverState('transparent')} 
-      onClick={() => clickHandler(currSqr.x, currSqr.y, currSqr.paintingSrc, true, currSqr.name)}
+      onClick={() => clickHandler(currSqr.x, currSqr.y, currSqr.image, true, currSqr.name)}
       style={{...gridSquareStyles}} 
     >
-      <img key={sqr_index} style={{...imgStyles}} src={currSqr.paintingSrc} alt="" />
+      <img key={sqr_index} style={{...imgStyles}} src={currSqr.image} alt="" />
     </div>
   )
 }

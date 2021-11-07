@@ -92,34 +92,27 @@ function BodyForModal({ imgSource, canvasRef }) {
   }
 }
 
-function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open, name }) {
+function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open, name, reloadPaintings }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [formVal, setFormVal] = useState("")
   const canvasRef = createRef();
-
-  const getImg = () => {
-    return canvasRef.current.canvasContainer.childNodes[1].toDataURL()
-  };
 
   const closeHandler = () => {
     clickHandler(null, null, "", false)
   }
 
   const submitHandler = () => {
-    console.log('fetch made')
-    fetch(
-      'http://localhost:3001/insertImage',
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({x: x, y: y, name: formVal, img: getImg()})
-      }
-    )
-    .then((res) => res.json())
+    let imgData = canvasRef.current.canvasContainer.childNodes[1].toDataURL()
+    fetch('http://localhost:3001/insertImage', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({x: x, y: y, image: imgData, name: formVal})
+    });
     closeHandler()
+    reloadPaintings()
   }
   return (
     <>
