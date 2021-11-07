@@ -97,8 +97,8 @@ function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open, name }
   const [formVal, setFormVal] = useState("")
   const canvasRef = createRef();
 
-  const saveData = () => {
-    console.log(canvasRef.current.canvasContainer.childNodes[1].toDataURL())
+  const getImg = () => {
+    return canvasRef.current.canvasContainer.childNodes[1].toDataURL()
   };
 
   const closeHandler = () => {
@@ -106,6 +106,19 @@ function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open, name }
   }
 
   const submitHandler = () => {
+    console.log('fetch made')
+    fetch(
+      'http://localhost:3001/insertImage',
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({x: x, y: y, name: formVal, img: getImg()})
+      }
+    )
+    .then((res) => res.json())
     closeHandler()
   }
   return (
@@ -131,8 +144,7 @@ function CanvasModal({ showingModal, clickHandler, x, y, imgSource, open, name }
                   <Button 
                     ml={3}
                     colorScheme="blue"
-                    // onClick={submitHandler}
-                    onClick={saveData}
+                    onClick={submitHandler}
                     disabled={formVal.length > 6 || formVal.length <= 0}
                   >
                   Submit
