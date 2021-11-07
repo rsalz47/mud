@@ -75,7 +75,7 @@ app.get("/getByCoordinate/x=:x/y=:y", (req, res) => {
 app.get("/getByName/name=:name", (req, res) => {
     let rows = []
     let name = req.params.name.toLowerCase()
-    let bestname = getBestName()
+    let bestname = getBestName(name)
     
     pool.query(`SELECT * FROM Museum 
                 WHERE name = ${bestname}`,   
