@@ -73,11 +73,14 @@ app.get("/getByCoordinate/x=:x/y=:y", (req, res) => {
 
 app.get("/getByName/name=:name", (req, res) => {
     let rows = []
+    console.log(rows)
     let name = req.params.name.toLowerCase()
+    console.log(name)
     let bestname = getBestName(name)
+    console.log(bestname)
     
     pool.query(`SELECT image FROM Museum 
-                WHERE name = ${bestname}`,   
+                WHERE name = $1::text`, [bestname], 
                 (err,result) => {
                     if (err) {
                         return console.error('Error executing query', err.stack)
@@ -90,7 +93,7 @@ app.get("/getByName/name=:name", (req, res) => {
     )
 })
 
-function getBestName(name) {
+function getBestName(name1) {
     let allNames = []
 
     pool.query(`SELECT name FROM Museum`,   
@@ -99,16 +102,16 @@ function getBestName(name) {
                         return console.error('Error executing query', err.stack)
                     }
                     if (result.rows !== []) {
-                        allNames = result.rows
+                        allNames = result.rows.map((elem) => elem.name)
                     }
                 }
     )
 
     if (allNames === []) {
-        return name;
+        return name1;
     }
 
-    let allNamesScores = Array.new(allNames.length) 
+    let allNamesScores = new Array(allNames.length) 
     allNames.forEach((elem) => elem.toLowerCase())
 
     //calculate the score for every name
@@ -139,7 +142,7 @@ function getBestName(name) {
         if(allNamesScore[ind] > allNamesScores[bestInd])
             bestInd = ind
     })
-    return allNames[ind]
+    return name1
 }
 
 //when hosted on VPS, change this to listen on every port?
