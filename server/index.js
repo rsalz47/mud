@@ -37,10 +37,20 @@ app.get("/getImages", (req, res) => {
       })
 })
 
-app.post("/insertImage", (req, res) => {
+app.post("/insertImage/x=:x/y=:y/url=:url/name=:name", (req, res) => {
     // Save image somehow
     // Send to database
-    res.end("Image uploaded successfully!");
+    let temp;
+    pool.query(`INSERT INTO MUSEUM (x, y, url, name)
+                VALUES (${req.params.x}, ${req.params.y}, '${req.params.url}', '${req.params.name}');`,
+        (err, result) => {
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            temp = result     
+        }
+    )
+    res.send(temp)
 })
 
 app.get("/getByCoordinate/x=:x/y=:y", (req, res) => {
