@@ -28,21 +28,21 @@ app.get("/", (req, res)=>{
 
 app.get("/getImages", (req, res) => {
     //select everything from images
-    pool.query('SELECT * FROM Museum', (err, result) => {
+    pool.query('SELECT image FROM Museum', (err, result) => {
         if (err) {
           return console.error('Error executing query', err.stack)
         }
         console.log(result.rows)
         res.json(result.rows);
-      })
+    })
 })
 
-app.post("/insertImage/x=:x/y=:y/url=:url/name=:name", (req, res) => {
+app.post("/insertImage/x=:x/y=:y/image=:image/name=:name", (req, res) => {
     // Save image somehow
     // Send to database
     let temp;
-    pool.query(`INSERT INTO MUSEUM (x, y, url, name)
-                VALUES (${req.params.x}, ${req.params.y}, '${req.params.url}', '${req.params.name}');`,
+    pool.query(`INSERT INTO MUSEUM (x, y, image, name)
+                VALUES (${req.params.x}, ${req.params.y}, '${req.params.image}', '${req.params.name}');`,
         (err, result) => {
             if (err) {
                 return console.error('Error executing query', err.stack)
@@ -143,6 +143,7 @@ function getBestName(name) {
     })
     return allNames[ind]
 }
+
 //when hosted on VPS, change this to listen on every port?
 //Essentially, wait for anything to talk to us
 app.listen(3001)
