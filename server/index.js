@@ -38,7 +38,6 @@ app.get("/getImages", (req, res) => {
 })
 
 app.post("/insertImage/x=:x/y=:y/image=:image/name=:name", (req, res) => {
-    // Save image somehow
     // Send to database
     let temp;
     pool.query(`INSERT INTO MUSEUM (x, y, image, name)
