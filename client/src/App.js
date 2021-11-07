@@ -25,8 +25,6 @@ const MOCK_PAINTINGS = [
 
 function App() {
 
-  //I do not know what this code does, plz explain Jack
-  //Some guy came and slapped this shit down, and now it just works
   const [showingModal, setShowingModal] = useState({
     show: false,
     coords: [null, null],
@@ -44,6 +42,7 @@ function App() {
       <header className="App-header">
 
         <p>Welcome to the Museum of User Design</p>
+        
 
         <Grid clickHandler={clickHandler} paintings={MOCK_PAINTINGS} />
         <CanvasModal 

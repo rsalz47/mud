@@ -35,7 +35,7 @@ app.get("/getImages", (req, res) => {
         }
         console.log(result.rows)
         res.json(result.rows);
-      })
+    })
 })
 
 app.post("/insertImage", (req, res) => {
@@ -76,7 +76,7 @@ app.get("/getByCoordinate/x=:x/y=:y", (req, res) => {
 app.get("/getByName/name=:name", (req, res) => {
     let rows = []
     let name = req.params.name.toLowerCase()
-    let bestname = getBestName()
+    let bestname = getBestName(name)
     
     pool.query(`SELECT image FROM Museum 
                 WHERE name = ${bestname}`,   
@@ -143,6 +143,7 @@ function getBestName(name) {
     })
     return allNames[ind]
 }
+
 //when hosted on VPS, change this to listen on every port?
 //Essentially, wait for anything to talk to us
 app.listen(3001)
