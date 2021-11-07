@@ -28,21 +28,20 @@ app.get("/", (req, res)=>{
 
 app.get("/getImages", (req, res) => {
     //select everything from images
-    pool.query('SELECT * FROM Museum', (err, result) => {
+    pool.query('SELECT image FROM Museum', (err, result) => {
         if (err) {
           return console.error('Error executing query', err.stack)
         }
         console.log(result.rows)
         res.json(result.rows);
-      })
+    })
 })
 
-app.post("/insertImage/x=:x/y=:y/url=:url/name=:name", (req, res) => {
-    // Save image somehow
+app.post("/insertImage/x=:x/y=:y/image=:image/name=:name", (req, res) => {
     // Send to database
     let temp;
-    pool.query(`INSERT INTO MUSEUM (x, y, url, name)
-                VALUES (${req.params.x}, ${req.params.y}, '${req.params.url}', '${req.params.name}');`,
+    pool.query(`INSERT INTO MUSEUM (x, y, image, name)
+                VALUES (${req.params.x}, ${req.params.y}, '${req.params.image}', '${req.params.name}');`,
         (err, result) => {
             if (err) {
                 return console.error('Error executing query', err.stack)
@@ -76,7 +75,7 @@ app.get("/getByCoordinate/x=:x/y=:y", (req, res) => {
 app.get("/getByName/name=:name", (req, res) => {
     let rows = []
     let name = req.params.name.toLowerCase()
-    let bestname = getBestName()
+    let bestname = getBestName(name)
     
     pool.query(`SELECT * FROM Museum 
                 WHERE name = ${bestname}`,   
@@ -143,6 +142,7 @@ function getBestName(name) {
     })
     return allNames[ind]
 }
+
 //when hosted on VPS, change this to listen on every port?
 //Essentially, wait for anything to talk to us
 app.listen(3001)
